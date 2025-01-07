@@ -1,3 +1,8 @@
+
+function isString(value){
+    return typeof value === "string";
+}
+
 export class CreateElement{
     constructor(tag, id, classname, display){
         this.tag = tag;
@@ -5,13 +10,19 @@ export class CreateElement{
         this.classname = classname;
         this.display = display;
 
-        const temp = document.createElement(tag);
-        temp.id = id;
-        temp.className = classname;
-        temp.style.display = display;
-        this.element = temp;
+        if(isString(tag)){
+            const temp = document.createElement(tag);
+            temp.id = id;
+            temp.className = classname;
+            temp.style.display = display;
+            this._element = temp;
+        }
+        else{
+            throw new Error("Invalid element type");
+        }
+
     }
-    get element(){
-        return this.element;
+    getElement(){
+        return this._element;
     }
 }

@@ -1,13 +1,17 @@
 import "./styles.css";
+import { greeting } from "./OverviewBoard";
 
 const content = document.getElementById("content");
 const link = document.getElementsByClassName("navLink");
 
+// Default to overview board
+    let nav = "Overview";
+    navigate(nav);
 // Attach event listener
 if(link.length > 0){
     Array.from(link).forEach(link => {
         link.addEventListener("click", () => {
-            const nav = link.innerText;
+            nav = link.innerText;
             navigate(nav);
         })
     });
@@ -16,23 +20,24 @@ if(link.length > 0){
 function navigate(nav){
     switch(nav){
         case "Profile":
-            console.log("Profile");
+            console.log(nav);
             rmCurrentPage();
             break;
         case "Projects":
-            console.log("Projects");
+            console.log(nav);
             rmCurrentPage();
             break;
         case "Calendar":
-            console.log("Calendar");
+            console.log(nav);
             rmCurrentPage();
             break;
-        case "Coconuts":
-            console.log("Coconuts");
+        case "Overview":
+            console.log(nav);
             rmCurrentPage();
+            content.appendChild(greeting);
             break;
         case "Setting":
-            console.log("Setting");
+            console.log(nav);
             rmCurrentPage();
             break;
     }
