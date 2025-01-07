@@ -42,5 +42,6 @@ function navigate(nav){
 function rmCurrentPage(){
     if(content.firstChild){
         content.removeChild(content.firstChild);
-    }
+        console.log("removing child");
+    }else console.log("No child to be removed");
 }
