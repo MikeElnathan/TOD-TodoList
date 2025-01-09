@@ -26,3 +26,13 @@ export class CreateElement{
         return this._element;
     }
 }
+
+export function createInput(type, id, className, placeholder){
+    const i = new CreateElement("input", id, className, "");
+    const input = i.getElement();
+    input.setAttribute("type", type);
+    input.setAttribute("required", "");
+    input.setAttribute("placeholder", placeholder);
+    
+    return input;
+}
