@@ -36,3 +36,22 @@ export function createInput(type, id, className, placeholder){
     
     return input;
 }
+
+export function createSubTask(id, className, parentNode, inputNode){
+    const t = new CreateElement("p", id, className, "");
+    const subtask = t.getElement();
+
+    const c = new CreateElement("p", "", "checkMark", "");
+    const checkMark = c.getElement();
+    checkMark.innerText = "x";
+
+    checkMark.addEventListener("click", ()=>{
+        console.log("I'm a text X");
+    })
+
+    subtask.innerText = inputNode.value;
+    
+    parentNode.insertBefore(subtask, inputNode);
+    parentNode.insertBefore(checkMark, subtask);
+    inputNode.value = "";
+}
