@@ -50,3 +50,46 @@ header{
     border: 2px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
+#ProjectWrapper{
+    margin: 1rem;
+    grid-template-rows: 1fr 3fr;
+}
+#AddProjects{
+    height: 10rem;
+    width: 10rem;
+    background-color: antiquewhite;
+    border-radius: 2px;
+    display: grid;
+    grid-template-rows: 1fr 5fr;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.9);
+}
+#AddProjects > p:first-child{
+    margin: 0;
+    font-size: 1rem;
+    padding-top: 0.4rem;
+    padding-left: 0.4rem;
+    font-weight: 600;
+}
+input.cardsTitle{
+    all: unset;
+    padding-left: 3px;
+    padding-top: 3px;
+    width: 8rem;
+}
+#addButton{
+    all: unset;
+    border-radius: 60%;
+    width: 6.8rem;
+    height: 6rem;
+    justify-self: center;
+    align-self: center;
+    font-size: 6rem;
+    color: rgba(0, 0, 0, 1);
+    text-align: center;
+    padding-bottom: 0.8rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
+#addButton:active{
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    color: rgba(0, 0, 0, 0.8);
+}

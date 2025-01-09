@@ -1,5 +1,6 @@
 import "./styles.css";
 import { wrapper } from "./OverviewBoard";
+import { ProjectWrapper } from "./ProjectPage";
 
 const content = document.getElementById("content");
 const link = document.getElementsByClassName("navLink");
@@ -37,6 +38,7 @@ function navigate(nav){
         case "Projects":
             console.log(nav);
             rmCurrentPage();
+            content.appendChild(ProjectWrapper);
             break;
         case "Calendar":
             console.log(nav);
