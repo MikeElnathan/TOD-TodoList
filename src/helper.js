@@ -3,7 +3,7 @@ function isString(value){
     return typeof value === "string";
 }
 
-export class CreateElement{
+class CreateElement{
     constructor(tag, id, classname, display){
         this.tag = tag;
         this.id = id;
@@ -38,12 +38,10 @@ export function createInput(type, id, className, placeholder){
 }
 
 export function createSubTask(id, className, parentNode, inputNode){
-    const t = new CreateElement("p", id, className, "");
-    const subtask = t.getElement();
+    const subtask = createParagraph(id, className);
 
-    const c = new CreateElement("p", "", "checkMark", "");
-    const checkMark = c.getElement();
-    checkMark.innerText = "x";
+    const checkMark = createParagraph("", "checkMark");
+    checkMark.textContent = "x";
 
     checkMark.addEventListener("click", ()=>{
         console.log("I'm a text X");
@@ -54,4 +52,23 @@ export function createSubTask(id, className, parentNode, inputNode){
     parentNode.insertBefore(subtask, inputNode);
     parentNode.insertBefore(checkMark, subtask);
     inputNode.value = "";
+}
+
+export function createDiv(id, className, display){
+    const temp = new CreateElement("div", id, className, display);
+    const div = temp.getElement();
+    return div;
+}
+
+export function createButton(id, className, type){
+    const temp = new CreateElement("button", id, className, "");
+    const button = temp.getElement();
+    button.setAttribute("type", type);
+    return button;
+}
+
+export function createParagraph(id, className){
+    const temp = new CreateElement("p", id, className, "");
+    const paragraph = temp.getElement();
+    return paragraph;
 }

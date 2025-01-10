@@ -1,37 +1,63 @@
-import { CreateElement, createInput } from "./helper";
-import { Cards } from "./logic";
-
-const temp = new CreateElement("div", "ProjectWrapper", "", "grid");
-const ProjectWrapper = temp.getElement();
+import { createButton, createDiv, createInput, createParagraph } from "./helper";
+const ProjectWrapper = createDiv("ProjectWrapper", "", "grid");
 let savedCard = [];
-// ---------------------------------------------------------------------
-// create a function to check and load json file here
-    // TODO
-// ----------------------------------------------------------------------
-const temp2 = new CreateElement("div", "AddProjects", "cards", "grid");
-const AddProjects = temp2.getElement();
+
+class Cards{
+    constructor(stringTitle, parentNode){
+        this.stringTitle = stringTitle;
+        parentNode.appendChild(this.createCard(stringTitle));
+        savedCard.push(this);
+    }
+    createCard(){
+        const card = createDiv("", "cards subTask", "");
+
+        const taskTitle = createParagraph("", "taskTitle");
+        taskTitle.textContent = this.stringTitle;
+
+        const inputElement = createInput("text", "", "taskList", "Add sub-task");
+
+        inputElement.addEventListener("keydown", (e) => {
+            if(e.key === "Enter"){
+                createSubTask("", "subList", card, inputElement);
+            }
+        });
+
+        card.append(taskTitle, inputElement);
+        
+        return card;
+    }
+}
+
+function createSubTask(id, className, parentNode, inputNode){
+    const subtask = createParagraph(id, className);
+
+    const checkMark = createParagraph("", "checkMark");
+    checkMark.textContent = "x";
+
+    checkMark.addEventListener("click", ()=>{
+        console.log("I'm a text X");
+    })
+
+    subtask.innerText = inputNode.value;
+    
+    parentNode.insertBefore(subtask, inputNode);
+    parentNode.insertBefore(checkMark, subtask);
+    inputNode.value = "";
+}
+
+const AddProjects = createDiv("AddProjects", "cards", "grid");
 
 const cardTitle = createInput("text", "", "cardsTitle", "Create project");
 
-const temp4 = new CreateElement("button", "addButton", "", "");
-const addTask = temp4.getElement();
+const addTask = createButton("addButton", "", "text");
 addTask.innerText = "+";
+addTask.addEventListener("click", () => {
+    createNewTask();
+});
 
-const temp5 = new CreateElement("div", "workSpace", "", "flex");
-const workSpace = temp5.getElement();
+const workSpace = createDiv("workSpace", "", "flex");
 workSpace.style.display = "none";
-
-AddProjects.appendChild(cardTitle);
-AddProjects.appendChild(addTask);
-
-// ----Create Card-------------------------------------------------------
-if(addTask){
-    addTask.addEventListener("click", () => {
-        getInput();
-    });
-}
-
-function getInput(){
+function createNewTask(){
     if(cardTitle.value.trim() != ""){
         // create task card here
         const c = new Cards(cardTitle.value, workSpace);
@@ -43,9 +69,8 @@ function getInput(){
     }
 }
 
-// -----------------------------------------------------------------------
+AddProjects.append(cardTitle, addTask);
 
-ProjectWrapper.appendChild(AddProjects);
-ProjectWrapper.appendChild(workSpace);
+ProjectWrapper.append(AddProjects, workSpace);
 
 export {ProjectWrapper};

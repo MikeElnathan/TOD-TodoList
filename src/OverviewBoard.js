@@ -1,13 +1,11 @@
-import { CreateElement } from "./helper";
+import { createDiv, createParagraph } from "./helper";
 
-const temp2 = new CreateElement("div", "OverviewWrapper", "", "grid");
-const wrapper = temp2.getElement();
+const wrapper = createDiv("OverviewWrapper", "", "grid");
 
-const temp = new CreateElement("p", "greeting", "", "");
-const greeting = temp.getElement();
+const greeting = createParagraph("greeting", "");
 
 greeting.style.cssText = "color: white; text-align: center; font-size: 3rem; margin: 0; padding-top: 0;";
-greeting.innerText = "Welcome stranger in the night!"
+greeting.textContent = "Welcome stranger in the night!"
 
 wrapper.appendChild(greeting);
 
