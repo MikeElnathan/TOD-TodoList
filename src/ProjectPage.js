@@ -1,19 +1,19 @@
-import { createButton, createDiv, createInput, createParagraph } from "./helper";
+import { createButton, createDiv, createInput, createParagraph, importImage, storageCheck } from "./helper";
+import Icon from "/asset/bx-save.svg";
+
 const ProjectWrapper = createDiv("ProjectWrapper", "", "grid");
 let savedCard = [];
 
 class Cards{
-    constructor(stringTitle, parentNode){
+    constructor(stringTitle, workSpace){
         this.stringTitle = stringTitle;
-        parentNode.appendChild(this.createCard(stringTitle));
-        savedCard.push(this);
+        workSpace.appendChild(this.createCard(stringTitle));
     }
     createCard(){
         const card = createDiv("", "cards subTask", "");
-
+        
         const taskTitle = createParagraph("", "taskTitle");
         taskTitle.textContent = this.stringTitle;
-
         const inputElement = createInput("text", "", "taskList", "Add sub-task");
 
         inputElement.addEventListener("keydown", (e) => {
@@ -22,9 +22,27 @@ class Cards{
             }
         });
 
-        card.append(taskTitle, inputElement);
+        const saveIcon = importImage("saveButton", "", Icon);
+        saveIcon.addEventListener("click", () => {
+            this.saveProjects();
+        })
+        
+        card.append(taskTitle, inputElement, saveIcon);
         
         return card;
+    }
+    saveProjects(){
+        const taskData = {
+            title: this.stringTitle,
+            subtask: Array.from(document.querySelectorAll(".subList")).map(subtask => subtask.innerText)
+        }
+        savedCard.push(taskData);
+        console.log(savedCard);
+    
+        if(storageCheck("localStorage")){
+            localStorage.setItem('task', JSON.stringify(savedCard));
+            alert("Project saved");
+        }
     }
 }
 
@@ -49,14 +67,9 @@ const AddProjects = createDiv("AddProjects", "cards", "grid");
 
 const cardTitle = createInput("text", "", "cardsTitle", "Create project");
 
-const addTask = createButton("addButton", "", "text");
-addTask.innerText = "+";
-addTask.addEventListener("click", () => {
-    createNewTask();
-});
-
 const workSpace = createDiv("workSpace", "", "flex");
 workSpace.style.display = "none";
+
 function createNewTask(){
     if(cardTitle.value.trim() != ""){
         // create task card here
@@ -69,8 +82,21 @@ function createNewTask(){
     }
 }
 
+const addTask = createButton("addButton", "", "text");
+addTask.innerText = "+";
+addTask.addEventListener("click", () => {
+    createNewTask();
+});
+
 AddProjects.append(cardTitle, addTask);
 
 ProjectWrapper.append(AddProjects, workSpace);
+
+window.onload = function() {
+    if(localStorage.getItem("task") !== null){
+        let storedArray = localStorage.getItem("task");
+        storedArray = JSON.parse(storedArray);
+    }
+}
 
 export {ProjectWrapper};

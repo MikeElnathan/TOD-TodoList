@@ -37,23 +37,6 @@ export function createInput(type, id, className, placeholder){
     return input;
 }
 
-export function createSubTask(id, className, parentNode, inputNode){
-    const subtask = createParagraph(id, className);
-
-    const checkMark = createParagraph("", "checkMark");
-    checkMark.textContent = "x";
-
-    checkMark.addEventListener("click", ()=>{
-        console.log("I'm a text X");
-    })
-
-    subtask.innerText = inputNode.value;
-    
-    parentNode.insertBefore(subtask, inputNode);
-    parentNode.insertBefore(checkMark, subtask);
-    inputNode.value = "";
-}
-
 export function createDiv(id, className, display){
     const temp = new CreateElement("div", id, className, display);
     const div = temp.getElement();
@@ -71,4 +54,33 @@ export function createParagraph(id, className){
     const temp = new CreateElement("p", id, className, "");
     const paragraph = temp.getElement();
     return paragraph;
+}
+
+export function importImage(id, className, src){
+    const Image = document.createElement("img");
+    Image.src = src;
+    Image.className = className;
+    Image.id = id;
+
+    return Image;
+}
+
+export function storageCheck(type){
+    let storage;
+    try{
+        storage = window[type];
+        const x = "__storage_test__";
+        storage.setItem(x, x);
+        storage.removeItem(x);
+
+        return true;
+    }catch(e){
+        return(
+            e instanceof DOMException &&
+      e.name === "QuotaExceededError" &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage &&
+      storage.length !== 0
+        );
+    }
 }
