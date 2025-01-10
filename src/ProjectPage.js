@@ -9,9 +9,8 @@ import { fetchData, saveToStorage } from "./logic";
 import Icon from "/asset/bx-save.svg";
 
 const ProjectWrapper = createDiv("ProjectWrapper", "", "grid");
-let savedCard = [];
 
-class Cards {
+class Card {
   constructor(stringTitle, workSpace) {
     this.stringTitle = stringTitle;
     this.card = this.createCard();
@@ -32,9 +31,7 @@ class Cards {
     });
 
     const saveIcon = importImage("saveButton", "", Icon);
-    saveIcon.addEventListener("click", () => {
-      this.saveProjects();
-    });
+    saveIcon.addEventListener("click", () => this.saveProjects());
 
     card.append(taskTitle, inputElement, saveIcon);
     workSpace.style.display = "flex";
@@ -43,17 +40,15 @@ class Cards {
   }
 
   saveProjects() {
+    let temp = [];
     let taskData = {
-      title: this.stringTitle,
+      // title: this.stringTitle,
       subtask: Array.from(this.card.querySelectorAll(".subList")).map(
         (subtask) => subtask.innerText,
       ),
     };
-    savedCard = [];
-    savedCard.push(taskData);
-    console.log(savedCard);
-
-    saveToStorage(this.stringTitle, savedCard);
+    temp.push(taskData);
+    saveToStorage(this.stringTitle, temp);
   }
 }
 
@@ -87,8 +82,7 @@ function createSubTask(
 
 function createNewTask() {
   if (cardTitle.value.trim() != "") {
-    // create task card here
-    const c = new Cards(cardTitle.value, workSpace);
+    const c = new Card(cardTitle.value, workSpace);
     cardTitle.value = "";
   } else {
     alert("Title can't be empty");
@@ -105,14 +99,14 @@ window.addEventListener("load", function () {
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     let storedArray = fetchData(key);
-    for (let item of storedArray) {
-      const c = new Cards(item.title, workSpace);
-      const inputEle = c.card.querySelector(".taskList");
-      
-      for (let subTaskText of item.subtask) {
-        createSubTask("", "subList", c.card, inputEle, subTaskText);
+
+    const c = new Card(key, workSpace);
+    const inputEle = c.card.querySelector(".taskList");
+    
+    for (let task of storedArray) {
+      for(let items of task.subtask){
+        createSubTask("", "subList", c.card, inputEle, items);
       }
-      console.log(inputEle);
     }
   }
 });
