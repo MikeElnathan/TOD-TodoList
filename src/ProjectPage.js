@@ -34,7 +34,7 @@ class Card {
     saveIcon.addEventListener("click", () => this.saveProjects());
 
     card.append(taskTitle, inputElement, saveIcon);
-    workSpace.style.display = "flex";
+    workSpace.style.cssText = "display: flex;";
 
     return card;
   }
@@ -102,7 +102,7 @@ window.addEventListener("load", function () {
 
     const c = new Card(key, workSpace);
     const inputEle = c.card.querySelector(".taskList");
-    
+
     for (let task of storedArray) {
       for(let items of task.subtask){
         createSubTask("", "subList", c.card, inputEle, items);
