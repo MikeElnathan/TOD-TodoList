@@ -7,9 +7,11 @@ let savedCard = [];
 class Cards{
     constructor(stringTitle, workSpace){
         this.stringTitle = stringTitle;
-        workSpace.appendChild(this.createCard(stringTitle));
+        this.workSpace = workSpace;
+        this.createCard();
     }
     createCard(){
+        console.log("a card is created");
         const card = createDiv("", "cards subTask", "");
         
         const taskTitle = createParagraph("", "taskTitle");
@@ -18,7 +20,7 @@ class Cards{
 
         inputElement.addEventListener("keydown", (e) => {
             if(e.key === "Enter"){
-                createSubTask("", "subList", card, inputElement);
+                createSubTask("", "subList", card, inputElement, "");
             }
         });
 
@@ -28,9 +30,10 @@ class Cards{
         })
         
         card.append(taskTitle, inputElement, saveIcon);
-        
-        return card;
+        this.workSpace.appendChild(card);
+        workSpace.style.display = "flex";
     }
+
     saveProjects(){
         const taskData = {
             title: this.stringTitle,
@@ -46,7 +49,7 @@ class Cards{
     }
 }
 
-function createSubTask(id, className, parentNode, inputNode){
+function createSubTask(id, className, parentNode, inputElement, subText){
     const subtask = createParagraph(id, className);
 
     const checkMark = createParagraph("", "checkMark");
@@ -56,11 +59,17 @@ function createSubTask(id, className, parentNode, inputNode){
         console.log("I'm a text X");
     })
 
-    subtask.innerText = inputNode.value;
-    
-    parentNode.insertBefore(subtask, inputNode);
+    if(subText !== ""){
+        subText = inputElement.value;
+        subtask.innerText = subText;
+    }else{
+        subtask.innerText = inputElement.value;
+    }
+
+    parentNode.insertBefore(subtask, inputElement);
     parentNode.insertBefore(checkMark, subtask);
-    inputNode.value = "";
+
+    inputElement.value = "";
 }
 
 const AddProjects = createDiv("AddProjects", "cards", "grid");
@@ -74,7 +83,6 @@ function createNewTask(){
     if(cardTitle.value.trim() != ""){
         // create task card here
         const c = new Cards(cardTitle.value, workSpace);
-        workSpace.style.display = "flex";
         cardTitle.value = "";
     }
     else{
@@ -92,11 +100,17 @@ AddProjects.append(cardTitle, addTask);
 
 ProjectWrapper.append(AddProjects, workSpace);
 
-window.onload = function() {
+window.addEventListener("load", function(){
     if(localStorage.getItem("task") !== null){
         let storedArray = localStorage.getItem("task");
         storedArray = JSON.parse(storedArray);
+        for(let item of storedArray){
+            console.log("Im triggered");
+            const c = new Cards(item.title, workSpace);
+        }
+    }else{
+        console.log("no data saved");
     }
-}
+}); 
 
 export {ProjectWrapper};
