@@ -4,8 +4,8 @@ import {
   createInput,
   createParagraph,
   importImage,
-  storageCheck,
 } from "./helper";
+import { fetchData, saveToStorage } from "./logic";
 import Icon from "/asset/bx-save.svg";
 
 const ProjectWrapper = createDiv("ProjectWrapper", "", "grid");
@@ -53,13 +53,17 @@ class Cards {
     savedCard.push(taskData);
     console.log(savedCard);
 
-    if (storageCheck("localStorage")) {
-      localStorage.setItem(this.stringTitle, JSON.stringify(savedCard));
-    }
+    saveToStorage(this.stringTitle, savedCard);
   }
 }
 
-function createSubTask(id, className, parentNode, inputElement, subText) {
+function createSubTask(
+  id,
+  className,
+  parentNode,
+  inputElement,
+  subText,
+) {
   const subtask = createParagraph(id, className);
 
   const checkMark = createParagraph("", "checkMark");
@@ -81,13 +85,6 @@ function createSubTask(id, className, parentNode, inputElement, subText) {
   inputElement.value = "";
 }
 
-const AddProjects = createDiv("AddProjects", "cards", "grid");
-
-const cardTitle = createInput("text", "", "cardsTitle", "Create project");
-
-const workSpace = createDiv("workSpace", "", "flex");
-workSpace.style.display = "none";
-
 function createNewTask() {
   if (cardTitle.value.trim() != "") {
     // create task card here
@@ -104,31 +101,31 @@ addTask.addEventListener("click", () => {
   createNewTask();
 });
 
-AddProjects.append(cardTitle, addTask);
-
-ProjectWrapper.append(AddProjects, workSpace);
-
 window.addEventListener("load", function () {
-  if (localStorage.length === 0) {
-    console.log("No data is saved");
-  } else {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      let storedArray = localStorage.getItem(key);
-      storedArray = JSON.parse(storedArray);
-
-      for (let item of storedArray) {
-        const c = new Cards(item.title, workSpace);
-        const inputEle = c.card.querySelector(".taskList");
-
-        for (let subTaskText of item.subtask) {
-          console.log(savedCard);
-          createSubTask("", "subList", c.card, inputEle, subTaskText);
-        }
-        console.log(inputEle);
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    let storedArray = fetchData(key);
+    for (let item of storedArray) {
+      const c = new Cards(item.title, workSpace);
+      const inputEle = c.card.querySelector(".taskList");
+      
+      for (let subTaskText of item.subtask) {
+        createSubTask("", "subList", c.card, inputEle, subTaskText);
       }
+      console.log(inputEle);
     }
   }
 });
+
+const AddProjects = createDiv("AddProjects", "cards", "grid");
+
+const cardTitle = createInput("text", "", "cardsTitle", "Create project");
+
+const workSpace = createDiv("workSpace", "", "flex");
+workSpace.style.display = "none";
+
+AddProjects.append(cardTitle, addTask);
+
+ProjectWrapper.append(AddProjects, workSpace);
 
 export { ProjectWrapper };
