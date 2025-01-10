@@ -7,8 +7,9 @@ let savedCard = [];
 class Cards{
     constructor(stringTitle, workSpace){
         this.stringTitle = stringTitle;
+        this.card = this.createCard();
         this.workSpace = workSpace;
-        this.createCard();
+        this.workSpace.appendChild(this.card);
     }
     createCard(){
         console.log("a card is created");
@@ -30,8 +31,9 @@ class Cards{
         })
         
         card.append(taskTitle, inputElement, saveIcon);
-        this.workSpace.appendChild(card);
         workSpace.style.display = "flex";
+
+        return card;
     }
 
     saveProjects(){
@@ -43,7 +45,7 @@ class Cards{
         console.log(savedCard);
     
         if(storageCheck("localStorage")){
-            localStorage.setItem('task', JSON.stringify(savedCard));
+            localStorage.setItem(this.stringTitle, JSON.stringify(savedCard));
             alert("Project saved");
         }
     }
@@ -60,7 +62,6 @@ function createSubTask(id, className, parentNode, inputElement, subText){
     })
 
     if(subText !== ""){
-        subText = inputElement.value;
         subtask.innerText = subText;
     }else{
         subtask.innerText = inputElement.value;
@@ -107,6 +108,12 @@ window.addEventListener("load", function(){
         for(let item of storedArray){
             console.log("Im triggered");
             const c = new Cards(item.title, workSpace);
+            const inputEle = c.card.querySelector(".taskList");
+            for(let subTaskText of item.subtask){
+                console.log(subTaskText);
+                createSubTask("", "subList", c.card, inputEle, subTaskText);
+            }
+            console.log(inputEle);
         }
     }else{
         console.log("no data saved");
